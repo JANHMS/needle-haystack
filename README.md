@@ -23,7 +23,6 @@ toc: true
 
 ### **Table of Contents**
 
-- [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
 
