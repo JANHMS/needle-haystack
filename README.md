@@ -1,72 +1,110 @@
-# Needle Python Library
+# Needle Haystack Integration
 
-This Python library provides convenient acccess to Needle API. There are various methods and data types which, we believe will help you explore Needle API quickly. There may be some functionality available in REST API earlier than this Python library. In any case, we recommend to take look the the complete [documentation](https://docs.needle-ai.com). Thank you for flying with us. 🚀
+|         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CI/CD   | [![Tests](https://github.com/JANHMS/needle-haystack/actions/workflows/test.yml/badge.svg)](https://github.com/JANHMS/needle-haystack/actions/workflows/test.yml) [![Coverage Status](https://img.shields.io/codecov/c/github/JANHMS/needle-haystack)](https://codecov.io/gh/JANHMS/needle-haystack) [![Tests](https://github.com/JANHMS/needle-haystack/actions/workflows/lint.yml/badge.svg)](https://github.com/JANHMS/needle-haystack/actions/workflows/lint.yml) [![types - Mypy](https://img.shields.io/badge/types-Mypy-blue.svg)](https://github.com/python/mypy) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) |
+| Package | [![PyPI](https://img.shields.io/pypi/v/needle-haystack)](https://pypi.org/project/needle-haystack/) ![PyPI - Downloads](https://img.shields.io/pypi/dm/needle-haystack?color=blue&logo=pypi&logoColor=gold) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/needle-haystack?logo=python&logoColor=gold) [![GitHub](https://img.shields.io/github/license/JANHMS/needle-haystack?color=blue)](LICENSE)                                                                                                                                                                                                                                                                                                                 |
+
+---
 
 ## Installation
 
-This library requires Python >3.8 and `pip` to use. You don't need the sources unless you want to modify it. Install with:
+This project resides in the Python Package Index (PyPI), so it can easily be installed with `pip`:
 
-```
-pip install needle-python
-```
-
-## Usage ⚡️
-
-To get started, generate an API key for your account in developer settings menu at [Needle](https://needle-ai.com). Note that your key will be valid until you revoke it. Set the following env variable before you run your code:
-
-```
-export NEEDLE_API_KEY=<your-api-key>
+```console
+pip install needle-haystack
 ```
 
-`NeedleClient` reads the API key from the environment by default. If you like to override this behaviour you can pass it in as a parameter. 
+## Usage
 
-### Retrieve context from Needle
+The Needle Haystack integration provides components for working with the Needle API. These components can be used to create collections, add files to collections, and perform searches.
 
-```python
-from needle.v1 import NeedleClient
-from needle.v1.models import FileToAdd
+### Configure your API keys
 
+- Get your `NEEDLE_API_KEY` from [Developer settings](https://needle-ai.com/dashboard/settings/developer).
 
-ndl = NeedleClient()
-collection = ndl.collections.create(name="Tech Trends")
-
-# add file to collection
-files = ndl.collections.files.add(
-    collection_id=collection_id,
-    files=[
-        FileToAdd(
-            name="tech-radar-30.pdf",
-            url="https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2024/04/tr_technology_radar_vol_30_en.pdf",
-        )
-    ],
-)
-
-# wait until indexing is complete
-files = ndl.collections.files.list(collection_id)
-if not all(f.status == "indexed" for f in files):
-    time.sleep(5)
-    files = ndl.collections.files.list(collection_id)
-
-# retrieve relevant context
-prompt = "What techniques moved into adopt in this volume of technology radar?"
-results = ndl.collections.search(collection_id, text=prompt)
+```
+os.environ["NEEDLE_API_KEY"] = ""
 ```
 
-Needle instantly extracts key points from your files.
+- Get OpenAPI key from https://platform.openai.com/
 
-### Complete your RAG pipeline
+```
+os.environ["OPENAI_API_KEY"] = ""
+```
 
-Naturally, to compose a human friendly answer use an LLM provider of your choice. For the demo purposes, we used OpenAI in this example:
+### Retrieve Context from Needle
 
-```python
+```
+from haystack import Pipeline
+from needle_haystack import HaystackNeedleCreateCollection
+
+# Initialize components
+create_collection = HaystackNeedleCreateCollection()
+
+# Define the pipeline
+pipeline = Pipeline()
+pipeline.add_component(name="create_collection", instance=create_collection)
+
+# Define inputs for the pipeline
+inputs = {
+    "create_collection": {"name": "Tech Trends"}
+}
+
+# Run the pipeline
+collection = pipeline.run(data=inputs)
+collection
+```
+
+### Add Files to a Collection and Search
+
+```
+from haystack import Pipeline
+from needle_haystack import HaystackNeedleAddFiles, HaystackNeedleSearch
+
+# Initialize components
+add_files = HaystackNeedleAddFiles()
+search = HaystackNeedleSearch()
+
+# Define the pipeline
+pipeline_add_files_and_search = Pipeline()
+pipeline_add_files_and_search.add_component(name="add_files", instance=add_files)
+pipeline_add_files_and_search.add_component(name="search", instance=search)
+
+# Define inputs for the pipeline
+inputs = {
+    "add_files": {
+        "collection_id": collection['create_collection']['collection_id'],
+        "file_urls": {
+            "tech-radar-30.pdf": "https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2024/04/tr_technology_radar_vol_30_en.pdf"
+        }
+    },
+    "search": {
+        "collection_id": collection['create_collection']['collection_id'],
+        "text": "What techniques moved into adopt in this volume of technology radar?"
+    }
+}
+
+# Run Pipeline
+results = pipeline_add_files_and_search.run(data=inputs)
+results
+```
+
+### Complete Your RAG Pipeline
+
+To compose a human-friendly answer, you can use an LLM provider of your choice. For demo purposes, this example uses OpenAI:
+
+```
 from openai import OpenAI
 
-system_messages = [{"role": "system", "content": r.content} for r in results] # results from Needle
+prompt = "What techniques moved into adopt in this volume of technology radar?"
+
+system_messages = [{"role": "system", "content": r.content} for r in results["search"]["results"]]
 user_message = {
     "role": "system",
     "content": f"""
-        Do not hallucinate. Only answer the question based on the provided results data. 
-        If there is no data in the provided data for the question, do not try to generate an answer that does not make sense. 
+        Only answer the question based on the provided results data.
+        If there is no data in the provided data for the question, do not try to generate an answer.
         This is the question: {prompt}
 """,
 }
@@ -81,17 +119,5 @@ answer = openai_client.chat.completions.create(
 )
 
 print(answer.choices[0].message.content)
-# -> Retrieval-Augmented Generation (RAG) is the technique that moved into "Adopt" in this volume of the Technology Radar.
+# -> Retrieval-Augmented Generation (RAG)
 ```
-
-This is one basic example of a RAG pipeline you can quicklu implement using Needle and OpenAI. Feel free to engineer more precise prompts and explore other prompting techniques such as chain-of-thoughts (CoT), graph of thoughts (GoT) etc. 
-
-Needle API helps you with hassle-free contextualization however does not limit you to a certain RAG technique. Let us know what you build in our [Discord channel](https://discord.gg/JzJcHgTyZx) :)
-
-## Exceptions 🧨
-
-If a request to Needle API fails, `needle.v1.models.Error` object will be thrown. There you can see a `message` and more details about the error.
-
-## Support 📞
-
-If you have questions you can contact us in our [Discord channel](https://discord.gg/JzJcHgTyZx). 
