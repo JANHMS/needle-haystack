@@ -10,7 +10,7 @@ sdk: https://github.com/oeken/needle-python
 sdk-pypi: https://pypi.org/project/needle-python/
 type: RAG as a Service
 report_issue: https://github.com/Needle-ai/needle-python/issues
-logo: /logos/needle.png
+logo: /logos/needle-logo.png
 version: Haystack 2.0
 toc: true
 ---
