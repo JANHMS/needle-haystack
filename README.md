@@ -55,7 +55,7 @@ os.environ["OPENAI_API_KEY"] = ""
 
 ### Create a Collection in Needle
 
-```
+```python
 from haystack import Pipeline
 from needle_haystack import HaystackNeedleCreateCollection
 
@@ -78,7 +78,7 @@ collection
 
 ### Add Files to a Collection and Search
 
-```
+```python
 from haystack import Pipeline
 from needle_haystack import HaystackNeedleAddFiles, HaystackNeedleSearch
 
@@ -114,7 +114,7 @@ results
 
 To compose a human-friendly answer, you can use an LLM provider of your choice. For demo purposes, this example uses OpenAI:
 
-```
+```python
 from openai import OpenAI
 
 prompt = "What techniques moved into adopt in this volume of technology radar?"
