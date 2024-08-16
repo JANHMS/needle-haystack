@@ -1,10 +1,24 @@
 # Needle Haystack Integration
 
-|         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CI/CD   | [![Tests](https://github.com/JANHMS/needle-haystack/actions/workflows/test.yml/badge.svg)](https://github.com/JANHMS/needle-haystack/actions/workflows/test.yml) [![Coverage Status](https://img.shields.io/codecov/c/github/JANHMS/needle-haystack)](https://codecov.io/gh/JANHMS/needle-haystack) [![Tests](https://github.com/JANHMS/needle-haystack/actions/workflows/lint.yml/badge.svg)](https://github.com/JANHMS/needle-haystack/actions/workflows/lint.yml) [![types - Mypy](https://img.shields.io/badge/types-Mypy-blue.svg)](https://github.com/python/mypy) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) |
-| Package | [![PyPI](https://img.shields.io/pypi/v/needle-haystack)](https://pypi.org/project/needle-haystack/) ![PyPI - Downloads](https://img.shields.io/pypi/dm/needle-haystack?color=blue&logo=pypi&logoColor=gold) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/needle-haystack?logo=python&logoColor=gold) [![GitHub](https://img.shields.io/github/license/JANHMS/needle-haystack?color=blue)](LICENSE)                                                                                                                                                                                                                                                                                                                 |
-
+---
+layout: integration
+name: Needle Haystack
+description: Trace your Haystack pipelines with Needle
+authors:
+  - name: [Needle AI](https://needle-ai.com)
+    socials:
+      linkedin: needle-ai
+pypi: https://pypi.org/project/needle-haystack/
+repo: https://github.com/JANHMS/needle-haystack
+sdk: https://github.com/oeken/needle-python
+skd-pypi: https://pypi.org/project/needle-python/
+type: RAG as a Service
+report_issue: https://github.com/Needle-ai/needle-python/issues
+report_issue: https://github.com/Needle-ai/needle-haystack/issues
+logo: /logos/needle.png
+version: Haystack 2.0
+toc: true
+---
 ---
 
 ## Installation
