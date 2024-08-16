@@ -3,7 +3,7 @@ layout: integration
 name: Needle Haystack
 description: Build RAG Haystack pipelines with Needle
 authors:
-  - name: [Needle](https://needle-ai.com)
+  - name: needle-ai.com
 pypi: https://pypi.org/project/needle-python/
 repo: https://github.com/JANHMS/needle-haystack
 sdk: https://github.com/oeken/needle-python
