@@ -1,7 +1,7 @@
 ---
 layout: integration
 name: Needle Haystack
-description: Trace and Monitor your Haystack pipelines with Needle
+description: Build RAG Haystack pipelines with Needle
 authors:
   - name: Needle AI
     socials:
