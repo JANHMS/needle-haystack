@@ -33,7 +33,7 @@ os.environ["NEEDLE_API_KEY"] = ""
 os.environ["OPENAI_API_KEY"] = ""
 ```
 
-### Retrieve Context from Needle
+### Create a Collection in Needle
 
 ```
 from haystack import Pipeline
