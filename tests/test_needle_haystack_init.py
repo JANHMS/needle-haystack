@@ -34,6 +34,6 @@ class TestInit:
     def test_version(self):
         """Test the actual `__version__` value is valid."""
         assert (
-            re.match(r"\d.\d.\d", needle_haystack.__version__)
+            re.match(r"^\d+\.\d+\.\d+$", needle_haystack.__version__)
             or needle_haystack.__version__ == "unknown"
         )
