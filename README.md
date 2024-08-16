@@ -1,5 +1,3 @@
-# Needle Haystack Integration
-
 ---
 layout: integration
 name: Needle Haystack
@@ -20,6 +18,8 @@ logo: /logos/needle.png
 version: Haystack 2.0
 toc: true
 ---
+
+# Needle Haystack Integration
 
 ### **Table of Contents**
 
