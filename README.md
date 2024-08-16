@@ -3,22 +3,29 @@
 ---
 layout: integration
 name: Needle Haystack
-description: Trace your Haystack pipelines with Needle
+description: Trace and Monitor your Haystack pipelines with Needle
 authors:
-  - name: [Needle AI](https://needle-ai.com)
+  - name: Needle AI
     socials:
+      github: Needle-ai
+      twitter: NeedleAI
       linkedin: needle-ai
-pypi: https://pypi.org/project/needle-haystack/
+pypi: https://pypi.org/project/needle-python/
 repo: https://github.com/JANHMS/needle-haystack
 sdk: https://github.com/oeken/needle-python
-skd-pypi: https://pypi.org/project/needle-python/
+sdk-pypi: https://pypi.org/project/needle-python/
 type: RAG as a Service
 report_issue: https://github.com/Needle-ai/needle-python/issues
-report_issue: https://github.com/Needle-ai/needle-haystack/issues
 logo: /logos/needle.png
 version: Haystack 2.0
 toc: true
 ---
+
+### **Table of Contents**
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
 
 ## Installation
 
