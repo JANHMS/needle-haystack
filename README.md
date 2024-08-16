@@ -19,7 +19,6 @@ logo: /logos/needle.png
 version: Haystack 2.0
 toc: true
 ---
----
 
 ## Installation
 
