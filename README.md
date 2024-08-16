@@ -27,13 +27,13 @@ The Needle Haystack integration provides components for working with the Needle 
 os.environ["NEEDLE_API_KEY"] = ""
 ```
 
-- Get OpenAPI key from https://platform.openai.com/
+- Get OpenAPI key from [OpenAI](https://platform.openai.com/)
 
 ```
 os.environ["OPENAI_API_KEY"] = ""
 ```
 
-### Retrieve Context from Needle
+### Create a Collection in Needle
 
 ```
 from haystack import Pipeline
