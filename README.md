@@ -54,7 +54,7 @@ os.environ["OPENAI_API_KEY"] = ""
 from needle_haystack import NeedleDocumentStore
 from haystack.utils import Secret
 
-# If not provided a new collection is generated, otherwise an existing collection is used.
+# Connect to an existing collection, passing collection_id, if no collection_id is provided a new collection is generated.
 # You can see your collections at https://needle-ai.com/dashboard/collections/
 document_store = NeedleDocumentStore(api_key=Secret.from_env_var("NEEDLE_API_KEY"), name="TechRadarCollection", collection_id='YOUR-COLLECTION-ID')
 
