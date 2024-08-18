@@ -2,11 +2,11 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
-from .components import HaystackNeedleCreateCollection, HaystackNeedleAddFiles, HaystackNeedleSearch
+from .components import NeedleDocumentStore, NeedleRetriever
 
 try:
     __version__ = version(__name__)
 except PackageNotFoundError:
     __version__ = "unknown"
 
-__all__ = ["HaystackNeedleCreateCollection", "HaystackNeedleAddFiles", "HaystackNeedleSearch"]
+__all__ = ["NeedleDocumentStore", "NeedleRetriever"]
