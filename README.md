@@ -1,82 +1,44 @@
----
-layout: integration
-name: Needle Haystack
-description: Build RAG Haystack pipelines with Needle
-authors:
-  - name: needle-ai.com
-pypi: https://pypi.org/project/needle-python/
-repo: https://github.com/JANHMS/needle-haystack
-sdk: https://github.com/oeken/needle-python
-sdk-pypi: https://pypi.org/project/needle-python/
-type: RAG as a Service
-report_issue: https://github.com/Needle-ai/needle-python/issues
-logo: /logos/needle-logo.png
-version: Haystack 2.0
-toc: true
----
+# Needle RAG tools for Haystack
 
-# Needle Haystack Integration
+[![PyPI - Version](https://img.shields.io/pypi/v/needle-haystack-ai.svg)](https://pypi.org/project/needle-haystack-ai)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/needle-haystack-ai.svg)](https://pypi.org/project/needle-haystack-ai)
 
-### **Table of Contents**
+This package provides `NeedleDocumentStore` and `NeedleEmbeddingRetriever` component for use in Haystack projects.
 
-- [Installation](#installation)
-- [Usage](#usage)
+## Usage ⚡️
 
-## Installation
+Get started by installing the package via `pip`.
 
-This project resides in the Python Package Index (PyPI), so it can easily be installed with `pip`:
-
-```console
-pip install needle-haystack
+```bash
+pip install needle-haystack-ai
 ```
 
-## Usage
+### API Keys
 
-The Needle Haystack integration provides components for working with the Needle API. These components can be used to create collections, add files to collections, and perform searches.
+We will show you building a common RAG pipeline using Needle tools and OpenAI generator.
+For using these tools you must set your environment variables, `NEEDLE_API_KEY` and `OPENAI_API_KEY` respectively.
 
-### Configure your API keys
+You can get your Needle API key from from [Developer settings](https://needle-ai.com/dashboard/settings).
 
-- Get your `NEEDLE_API_KEY` from [Developer settings](https://needle-ai.com/dashboard/settings/developer).
+### Example Pipeline 🧱
 
-```
-os.environ["NEEDLE_API_KEY"] = ""
-```
-
-- Get OpenAPI key from [OpenAI](https://platform.openai.com/)
-
-```
-os.environ["OPENAI_API_KEY"] = ""
-```
-
-### Create a Collection in Needle and add Files
+In Needle document stores are called collections. For detailed information, see our [docs](https://docs.needle-ai.com).
+You can create a reference to your Needle collection using `NeedleDocumentStore` and use `NeedleEmbeddingRetriever` to retrieve documents from it.
 
 ```python
-from needle_haystack import NeedleDocumentStore
-from haystack.utils import Secret
+from needle_haystack import NeedleDocumentStore, NeedleEmbeddingRetriever
 
-# Connect to an existing collection, passing collection_id, if no collection_id is provided a new collection is generated.
-# You can see your collections at https://needle-ai.com/dashboard/collections/
-document_store = NeedleDocumentStore(api_key=Secret.from_env_var("NEEDLE_API_KEY"), name="TechRadarCollection", collection_id='YOUR-COLLECTION-ID')
-
-# Add files to your NeedleDocumentStore.
-file_urls = {
-    "tech-radar-30.pdf": "https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2024/04/tr_technology_radar_vol_30_en.pdf"
-}
-document_store.write_documents(file_urls=file_urls)
+document_store = NeedleDocumentStore(collection_id="<your-collection-id>")
+retriever = NeedleEmbeddingRetriever(document_store=document_store)
 ```
 
-### Search your collection
+Use the retriever in a Haystack pipeline. Example:
 
 ```python
 from haystack import Pipeline
-from haystack.utils import Secret
 from haystack.components.generators import OpenAIGenerator
-from haystack.components.builders import PromptBuilder  # Correct import for PromptBuilder
-from needle_haystack import NeedleRetriever
+from haystack.components.builders import PromptBuilder
 
-retriever = NeedleRetriever(document_store=document_store)
-
-# Set up a prompt template for the PromptBuilder
 prompt_template = """
 Given the following retrieved documents, generate a concise and informative answer to the query:
 
@@ -89,31 +51,38 @@ Documents:
 Answer:
 """
 
-# Initialize the PromptBuilder
 prompt_builder = PromptBuilder(template=prompt_template)
+llm = OpenAIGenerator()
 
-# Initialize the OpenAIGenerator with the API key
-llm = OpenAIGenerator(api_key=Secret.from_env_var("OPENAI_API_KEY"))
-
-# Build the pipeline
-basic_rag_pipeline = Pipeline()
-basic_rag_pipeline.add_component("retriever", retriever)
-basic_rag_pipeline.add_component("prompt_builder", prompt_builder)
-basic_rag_pipeline.add_component("llm", llm)
+# Add components to pipeline
+pipeline = Pipeline()
+pipeline.add_component("retriever", retriever)
+pipeline.add_component("prompt_builder", prompt_builder)
+pipeline.add_component("llm", llm)
 
 # Connect the components
-basic_rag_pipeline.connect("retriever", "prompt_builder.documents")
-basic_rag_pipeline.connect("prompt_builder", "llm")
+pipeline.connect("retriever", "prompt_builder.documents")
+pipeline.connect("prompt_builder", "llm")
+```
 
-# Define the query
-question = "What techniques moved to adopt?"
+Run your RAG pipeline:
 
-# Run the full pipeline
+```python
+prompt = "What is the topic of the news?"
+
 result = basic_rag_pipeline.run({
-    "retriever": {"text": question},
-    "prompt_builder": {"query": question}
+    "retriever": {"text": prompt},
+    "prompt_builder": {"query": prompt}
 })
 
-# Print the final result generated by the LLM
+# Print final answer
 print(result['llm']['replies'][0])
 ```
+
+# Support 📞
+
+For detailed guides, take a look at our [docs](https://docs.needle-ai.com). If you have questions or requests you can contact us in our [Discord channel](https://discord.gg/JzJcHgTyZx). 
+
+# License
+
+`needle-haystack` is distributed under the terms of the MIT license.

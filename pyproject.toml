@@ -3,9 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "needle-haystack"
-version = "0.2.0"
-description = "Needle haystack client library for Python"
+name = "needle-haystack-ai"
+version = "0.1.0"
+description = "Needle RAG tools for Haystack"
 authors = [
     "Onur Eken <m.onureken@gmail.com>",
     "Jan Heimes <heimesjan9@gmail.com>",
@@ -34,14 +34,13 @@ classifiers = [
 [tool.poetry.urls]
 homepage = "https://needle-ai.com"
 documentation = "https://docs.needle-ai.com"
-repository = "https://github.com/oeken/needle-haystack"
-issues = "https://github.com/oeken/needle-haystack/issues"
+repository = "https://github.com/JANHMS/needle-haystack"
+issues = "https://github.com/JANHMS/needle-haystack/issues"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-requests = "^2.32.3"
 haystack-ai = "^2.4.0"
-needle-python = "^0.2.0"
+needle-python = "^0.3.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.1"
@@ -57,8 +56,6 @@ pytest = "^8.2.2"
 openai = "^1.39.0"
 ipykernel = "^6.29.5"
 ipywidgets = "^8.1.3"
-haystack-ai = "^2.4.0"
-needle-python = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"
@@ -76,15 +73,15 @@ select = [
     "C",  # flake8-comprehensions
     "B",  # flake8-bugbear
     "D",  # pydocstyle
-    "UP",  # pyupgrade
+    "UP", # pyupgrade
 ]
 ignore = [
-    "E501",  # line too long, handled by black
-    "C901",  # function is too complex
-    "D206",  # indent with spaces, not recommended with formatter
-    "W191",  # tab-indentation, not recommended with formatter
-    "D203",  # no-blank-line-before-class
-    "D213",  # multi-line-summary-second-line
+    "E501", # line too long, handled by black
+    "C901", # function is too complex
+    "D206", # indent with spaces, not recommended with formatter
+    "W191", # tab-indentation, not recommended with formatter
+    "D203", # no-blank-line-before-class
+    "D213", # multi-line-summary-second-line
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -101,10 +98,7 @@ strict_optional = true
 ignore_missing_imports = false
 
 [[tool.mypy.overrides]]
-module = [
-    "haystack",
-    "haystack.utils"
-]
+module = ["haystack", "haystack.utils"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -113,9 +107,7 @@ addopts = "--verbose"
 filterwarnings = 'error'
 xfail_strict = true
 testpaths = ["tests"]
-markers = [
-  "integration: integration tests",
-]
+markers = ["integration: integration tests"]
 
 [tool.coverage.run]
 source = ["needle_haystack"]
